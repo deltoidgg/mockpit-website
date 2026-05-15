@@ -1,0 +1,86 @@
+---
+title: MSW
+sidebar_position: 4
+description: Connect MockPit to Mock Service Worker and record mock transport provenance.
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# MSW
+
+Use the MSW adapter when mock transport is part of the prototype. MockPit can mark handler
+responses, list critical route gaps, and help clean up stale workers when leaving mock mode.
+
+## Install
+
+<Tabs groupId="package-manager">
+  <TabItem value="pnpm" label="pnpm" default>
+
+```sh
+pnpm add -D @mockpit/core @mockpit/browser @mockpit/devtools @mockpit/msw msw
+```
+
+  </TabItem>
+  <TabItem value="npm" label="npm">
+
+```sh
+npm install --save-dev @mockpit/core @mockpit/browser @mockpit/devtools @mockpit/msw msw
+```
+
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+
+```sh
+yarn add --dev @mockpit/core @mockpit/browser @mockpit/devtools @mockpit/msw msw
+```
+
+  </TabItem>
+</Tabs>
+
+## Set Up The Worker
+
+Use `@mockpit/msw/browser` in browser apps and `@mockpit/msw/node` in tests.
+
+```ts title="src/mocks/browser.ts"
+import { http, HttpResponse } from "msw";
+import { setupMockPitWorker, withMockPitHandler } from "@mockpit/msw/browser";
+import { mockpit } from "../mockpit";
+
+export const worker = await setupMockPitWorker({
+  mockpit,
+  critical: ["GET /api/customers"],
+  handlers: [
+    http.get(
+      "/api/customers",
+      withMockPitHandler(
+        "customers.list",
+        () => HttpResponse.json({ customers: [{ id: 1, name: "Acme" }] }),
+        { mockpit, method: "GET", url: "/api/customers" },
+      ),
+    ),
+  ],
+});
+
+await worker.start({ quiet: true });
+```
+
+`withMockPitHandler` records a `mock` source for the resource, adds an
+`x-mockpit-source: mock` response header, and catches handler errors.
+
+## Critical Routes
+
+Add critical request descriptors for routes that must not silently pass through in mock mode.
+If an unhandled request matches a critical descriptor, MockPit records a blocked transport
+issue.
+
+## Clean Up Stale Workers
+
+```ts
+import { cleanupMswWorkers } from "@mockpit/msw/browser";
+
+await cleanupMswWorkers({ scriptName: "/mockServiceWorker.js" });
+```
+
+Use cleanup when a user leaves `mock` mode and the mode transition says transport cleanup is
+required.

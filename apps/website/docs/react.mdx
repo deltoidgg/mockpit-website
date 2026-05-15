@@ -1,0 +1,116 @@
+---
+title: React
+sidebar_position: 3
+description: Use the MockPit React provider, hooks, markers, sections, and devtools component.
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+# React
+
+The React package wraps the browser client with a provider, reactive hooks, UI markers, and
+a devtools component.
+
+## Install
+
+<Tabs groupId="package-manager">
+  <TabItem value="pnpm" label="pnpm" default>
+
+```sh
+pnpm add -D @mockpit/core @mockpit/browser @mockpit/devtools @mockpit/react
+```
+
+  </TabItem>
+  <TabItem value="npm" label="npm">
+
+```sh
+npm install --save-dev @mockpit/core @mockpit/browser @mockpit/devtools @mockpit/react
+```
+
+  </TabItem>
+  <TabItem value="yarn" label="yarn">
+
+```sh
+yarn add --dev @mockpit/core @mockpit/browser @mockpit/devtools @mockpit/react
+```
+
+  </TabItem>
+</Tabs>
+
+## Mount
+
+```tsx title="src/main.tsx"
+import { createMockPitClient } from "@mockpit/browser";
+import { MockPitDevtools, MockPitProvider } from "@mockpit/react";
+import { config } from "../mockpit.config";
+
+const mockpit = createMockPitClient({ config });
+
+function Root() {
+  return (
+    <MockPitProvider client={mockpit}>
+      <App />
+      <MockPitDevtools />
+    </MockPitProvider>
+  );
+}
+```
+
+## Mark Sections And Copy
+
+`AuditSection` groups visible UI for section-level summaries. `AuditMark` records visible
+presentation values. The current React API uses `source`, not `sourceKind`.
+
+```tsx
+import { AuditMark, AuditSection } from "@mockpit/react";
+
+export function CustomerPage() {
+  return (
+    <AuditSection id="customers.table">
+      <h1>Customers</h1>
+      <AuditMark
+        resourceKey="ui.customers.emptyState"
+        source="hardcoded"
+        label="Customer empty state copy"
+      >
+        No customers found.
+      </AuditMark>
+    </AuditSection>
+  );
+}
+```
+
+## Hooks
+
+| Hook                         | Returns                                    |
+| ---------------------------- | ------------------------------------------ |
+| `useMockPitClient()`         | The `MockPitClient` instance.              |
+| `useMockPitSnapshot()`       | The full reactive provenance snapshot.     |
+| `useMockPitMode()`           | `{ mode, setMode }`.                       |
+| `useMockPitRecords(filter?)` | Filtered or all audit records.             |
+| `useRouteProvenance()`       | Current route summary.                     |
+| `useSectionProvenance(id)`   | Section summary by id.                     |
+| `useCaptureStatus()`         | Capture evaluation for the current route.  |
+| `useScenarioControls()`      | `{ scenarios, definitions, setScenario }`. |
+
+## Example Control
+
+```tsx
+import { useMockPitClient, useRouteProvenance } from "@mockpit/react";
+
+export function ProvenanceControls() {
+  const client = useMockPitClient();
+  const summary = useRouteProvenance();
+
+  return (
+    <>
+      <p>Route status: {summary.status}</p>
+      <button onClick={() => void client.fetch("customers.list", "/api/customers")}>
+        Load customers
+      </button>
+      <button onClick={() => client.setMode("audit")}>Audit mode</button>
+    </>
+  );
+}
+```

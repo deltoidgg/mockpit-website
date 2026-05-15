@@ -1,0 +1,27 @@
+# MockPit
+
+MockPit is a TypeScript package family for runtime provenance devtools. It records,
+visualises, and exports the source of visible data in prototype applications so teams can
+see whether a screen is using live API data, MSW mocks, fixture fallbacks, derived values,
+hardcoded copy, empty responses, unsupported capabilities, errors, or unknown sources.
+
+Primary docs:
+- /docs/intro - concept, source taxonomy, and mental model
+- /docs/quick-start - install, configure, create a client, mount devtools, instrument fetch
+- /docs/react - React provider, hooks, AuditMark, AuditSection, MockPitDevtools
+- /docs/msw - MSW worker setup, withMockPitHandler, critical routes, cleanup
+- /docs/configuration - resources, sections, capture policies, scenarios, redaction
+- /docs/modes - mock, hybrid, live, audit, and capture modes
+- /docs/cli - mockpit init, doctor, and audit
+- /docs/ai-agent-conventions - rules for AI-assisted MockPit projects
+
+Package names:
+- @mockpit/core
+- @mockpit/browser
+- @mockpit/devtools
+- @mockpit/react
+- @mockpit/msw
+- @mockpit/cli
+
+Important API note: the React AuditMark component currently accepts a prop named `source`,
+not `sourceKind`.

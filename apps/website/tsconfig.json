@@ -1,23 +1,16 @@
 {
   "compilerOptions": {
-    "target": "es2023",
-    "module": "esnext",
-    "lib": ["ES2023", "DOM"],
-    "types": ["vite-plus/client"],
-    "skipLibCheck": true,
-
-    /* Bundler mode */
+    "allowJs": true,
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "moduleDetection": "force",
+    "module": "esnext",
+    "strict": true,
     "noEmit": true,
-
-    /* Linting */
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": true
+    "skipLibCheck": true,
+    "types": ["node", "@docusaurus/module-type-aliases"]
   },
-  "include": ["src"]
+  "include": ["src", "docs", "docusaurus.config.ts", "sidebars.ts"]
 }
