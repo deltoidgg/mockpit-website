@@ -1,5 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "vp run website#build",
+  "buildCommand": "npx --no-install vp run website#build",
   "outputDirectory": "apps/website/build"
 }
