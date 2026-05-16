@@ -50,6 +50,10 @@ const config: Config = {
 
   themeConfig: {
     image: "img/mockpit-devtools-card.png",
+    colorMode: {
+      defaultMode: "dark",
+      respectPrefersColorScheme: true,
+    },
     navbar: {
       title: "MockPit",
       logo: {
@@ -67,6 +71,7 @@ const config: Config = {
           href: "https://github.com/deltoidgg/mockpit",
           label: "GitHub",
           position: "right",
+          className: "navbar__link--github",
         },
       ],
     },
@@ -125,7 +130,7 @@ const config: Config = {
     },
     prism: {
       theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      darkTheme: prismThemes.vsDark,
       additionalLanguages: ["bash", "json"],
     },
   } satisfies Preset.ThemeConfig,
